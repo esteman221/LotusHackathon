@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FacturaAI — Capturar Factura</title>
+
+  <!-- Tailwind CSS con plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Estilos globales del proyecto -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/scanner.css" />
+
+  <!-- Configuración de Tailwind (idéntica al index para coherencia de tokens) -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary":                    "#091426",
+            "on-primary":                 "#ffffff",
+            "primary-container":          "#1e293b",
+            "primary-fixed":              "#d8e3fb",
+            "primary-fixed-dim":          "#bcc7de",
+            "on-primary-fixed":           "#111c2d",
+            "on-primary-fixed-variant":   "#3c475a",
+            "on-primary-container":       "#8590a6",
+            "inverse-primary":            "#bcc7de",
+            "secondary":                  "#0058be",
+            "on-secondary":               "#ffffff",
+            "secondary-container":        "#2170e4",
+            "on-secondary-container":     "#fefcff",
+            "secondary-fixed":            "#d8e2ff",
+            "secondary-fixed-dim":        "#adc6ff",
+            "on-secondary-fixed":         "#001a42",
+            "on-secondary-fixed-variant": "#004395",
+            "tertiary":                   "#1e1200",
+            "on-tertiary":                "#ffffff",
+            "tertiary-container":         "#35260c",
+            "on-tertiary-container":      "#a38c6a",
+            "tertiary-fixed":             "#fadfb8",
+            "tertiary-fixed-dim":         "#ddc39d",
+            "on-tertiary-fixed":          "#271902",
+            "on-tertiary-fixed-variant":  "#564427",
+            "surface":                    "#f8f9ff",
+            "surface-dim":                "#cbdbf5",
+            "surface-bright":             "#f8f9ff",
+            "surface-container-lowest":   "#ffffff",
+            "surface-container-low":      "#eff4ff",
+            "surface-container":          "#e5eeff",
+            "surface-container-high":     "#dce9ff",
+            "surface-container-highest":  "#d3e4fe",
+            "on-surface":                 "#0b1c30",
+            "on-surface-variant":         "#45474c",
+            "surface-variant":            "#d3e4fe",
+            "surface-tint":               "#545f73",
+            "inverse-surface":            "#213145",
+            "inverse-on-surface":         "#eaf1ff",
+            "outline":                    "#75777d",
+            "outline-variant":            "#c5c6cd",
+            "background":                 "#f8f9ff",
+            "on-background":              "#0b1c30",
+            "error":                      "#ba1a1a",
+            "on-error":                   "#ffffff",
+            "error-container":            "#ffdad6",
+            "on-error-container":         "#93000a",
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg:      "0.25rem",
+            xl:      "0.5rem",
+            full:    "0.75rem",
+          },
+          spacing: {
+            xs:              "4px",
+            sm:              "8px",
+            md:              "16px",
+            lg:              "24px",
+            xl:              "32px",
+            unit:            "4px",
+            gutter:          "16px",
+            "margin-mobile": "16px",
+            "margin-tablet": "24px",
+          },
+          fontFamily: {
+            "body-md":            ["Inter"],
+            "body-lg":            ["Inter"],
+            "label-sm":           ["Inter"],
+            "label-md":           ["Inter"],
+            "headline-md":        ["Inter"],
+            "headline-lg":        ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+          },
+          fontSize: {
+            "body-md":            ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "body-lg":            ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "label-sm":           ["11px", { lineHeight: "14px", fontWeight: "500" }],
+            "label-md":           ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "headline-md":        ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "headline-lg":        ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-20">
+
+  <!-- ══════════════════════════════════════
+       TOP APP BAR
+  ══════════════════════════════════════ -->
+  <header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50
+                 flex items-center gap-sm px-margin-mobile h-12">
+    <button id="btn-back"
+            class="flex items-center justify-center w-9 h-9 rounded-full
+                   hover:bg-surface-container-low active:bg-surface-container
+                   transition-colors">
+      <span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+    </button>
+    <div class="flex items-center gap-sm">
+      <span class="material-symbols-outlined text-primary">receipt_long</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary">Capturar Factura</h1>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ══════════════════════════════════════ -->
+  <main class="mt-12 px-margin-mobile pt-lg">
+
+    <!-- ────────────────────────────────────
+         FASE 1: CAPTURA DE IMAGEN
+    ──────────────────────────────────── -->
+    <section id="phase-capture">
+
+      <p class="text-on-surface-variant font-body-md mb-lg">
+        Selecciona una imagen de tu factura para extraer los datos automáticamente.
+      </p>
+
+      <!-- Zona de preview / placeholder -->
+      <div class="scanner-dropzone mb-md" id="dropzone">
+
+        <!-- Placeholder (estado vacío) -->
+        <div id="capture-placeholder" class="scanner-placeholder">
+          <div class="scanner-placeholder__icon">
+            <span class="material-symbols-outlined">photo_camera</span>
+          </div>
+          <p class="scanner-placeholder__title">Sin imagen seleccionada</p>
+          <p class="scanner-placeholder__subtitle">
+            Toca el botón de abajo para seleccionar una foto de tu factura
+          </p>
+        </div>
+
+        <!-- Preview de la imagen (oculto hasta que se seleccione) -->
+        <img id="image-preview"
+             src=""
+             alt="Vista previa de la factura"
+             hidden
+             class="scanner-preview-img" />
+
+        <!-- Esquinas decorativas del visor -->
+        <div class="scanner-corner scanner-corner--tl"></div>
+        <div class="scanner-corner scanner-corner--tr"></div>
+        <div class="scanner-corner scanner-corner--bl"></div>
+        <div class="scanner-corner scanner-corner--br"></div>
+      </div>
+
+      <!-- Input file oculto -->
+      <input
+        id="file-input"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        class="hidden"
+        aria-label="Seleccionar imagen de factura"
+      />
+
+      <!-- Botón seleccionar archivo -->
+      <button
+        id="btn-select-file"
+        class="w-full border-2 border-dashed border-secondary text-secondary
+               h-12 rounded-xl flex items-center justify-center gap-sm
+               font-label-md mb-sm active:scale-[0.98] transition-transform
+               hover:bg-secondary-fixed">
+        <span class="material-symbols-outlined">add_photo_alternate</span>
+        Seleccionar imagen
+      </button>
+
+      <!-- Botón confirmar y procesar -->
+      <button
+        id="btn-confirm-scan"
+        disabled
+        class="w-full bg-primary text-on-primary h-12 rounded-xl
+               flex items-center justify-center gap-sm font-label-md
+               active:scale-[0.98] transition-transform shadow-md
+               opacity-50 cursor-not-allowed">
+        <span class="material-symbols-outlined">document_scanner</span>
+        Confirmar y procesar
+      </button>
+
+      <!-- Nota informativa -->
+      <p class="text-center text-label-sm text-on-surface-variant mt-md">
+        <span class="material-symbols-outlined text-[14px] align-middle">info</span>
+        Los datos se extraen con IA y pueden requerir revisión.
+      </p>
+
+    </section><!-- /phase-capture -->
+
+    <!-- ────────────────────────────────────
+         FASE 2: PROCESANDO
+    ──────────────────────────────────── -->
+    <section id="phase-processing" hidden>
+
+      <div class="flex flex-col items-center justify-center py-16 gap-lg">
+
+        <!-- Spinner animado -->
+        <div class="scanner-spinner">
+          <div class="scanner-spinner__ring"></div>
+          <span class="material-symbols-outlined scanner-spinner__icon">
+            document_scanner
+          </span>
+        </div>
+
+        <!-- Texto de estado -->
+        <div class="text-center">
+          <h2 class="font-headline-md text-headline-md text-primary mb-xs">
+            Analizando factura…
+          </h2>
+          <p class="text-on-surface-variant font-body-md" id="processing-status">
+            Extrayendo datos con IA
+          </p>
+        </div>
+
+        <!-- Barra de progreso animada -->
+        <div class="w-full max-w-xs bg-surface-container rounded-full h-1.5 overflow-hidden">
+          <div class="scanner-progress-bar h-full bg-secondary rounded-full"></div>
+        </div>
+
+        <!-- Pasos del proceso -->
+        <div class="w-full max-w-xs flex flex-col gap-sm">
+          <div class="processing-step processing-step--active" id="step-upload">
+            <span class="material-symbols-outlined text-[16px]">cloud_upload</span>
+            Cargando imagen
+          </div>
+          <div class="processing-step" id="step-ocr">
+            <span class="material-symbols-outlined text-[16px]">psychology</span>
+            Reconocimiento de texto (OCR)
+          </div>
+          <div class="processing-step" id="step-extract">
+            <span class="material-symbols-outlined text-[16px]">data_object</span>
+            Estructurando datos
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /phase-processing -->
+
+    <!-- ────────────────────────────────────
+         FASE 3: RESULTADO EXTRAÍDO
+    ──────────────────────────────────── -->
+    <section id="phase-result" hidden>
+
+      <!-- Badge de éxito -->
+      <div class="flex items-center gap-sm mb-lg p-md rounded-xl bg-green-50 border border-green-200">
+        <span class="material-symbols-outlined text-green-600">check_circle</span>
+        <div>
+          <p class="font-semibold text-green-800 text-body-md">Factura procesada con éxito</p>
+          <p class="text-green-700 text-label-sm">Revisa los datos antes de guardar</p>
+        </div>
+      </div>
+
+      <!-- Encabezado de la factura -->
+      <div class="bg-surface border border-outline-variant rounded-xl p-md mb-sm">
+        <div class="flex justify-between items-start mb-sm">
+          <div>
+            <p class="text-label-md text-on-surface-variant uppercase tracking-widest mb-xs">Comercio</p>
+            <p class="font-bold text-body-lg text-primary" id="result-comercio">—</p>
+          </div>
+          <span class="badge badge--ok">Extraído</span>
+        </div>
+        <div class="grid grid-cols-2 gap-md pt-sm border-t border-outline-variant">
+          <div>
+            <p class="text-label-sm text-on-surface-variant mb-xs">Fecha</p>
+            <p class="font-semibold text-body-md text-on-surface" id="result-fecha">—</p>
+          </div>
+          <div>
+            <p class="text-label-sm text-on-surface-variant mb-xs">Nº Factura</p>
+            <p class="font-semibold text-body-md text-on-surface" id="result-numero">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de productos -->
+      <div class="bg-surface border border-outline-variant rounded-xl p-md mb-sm">
+        <h3 class="font-headline-md text-headline-md text-primary mb-md">
+          Productos
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b-2 border-outline-variant">
+                <th class="pb-2 text-label-md text-on-surface-variant font-label-md">Producto</th>
+                <th class="pb-2 text-label-md text-on-surface-variant font-label-md text-center">Cant.</th>
+                <th class="pb-2 text-label-md text-on-surface-variant font-label-md text-right">P/U</th>
+                <th class="pb-2 text-label-md text-on-surface-variant font-label-md text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody id="result-productos">
+              <!-- Filas inyectadas por scanner.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Totales -->
+      <div class="bg-surface border border-outline-variant rounded-xl p-md mb-xl">
+        <div class="flex justify-between items-center py-xs border-b border-outline-variant">
+          <span class="text-body-md text-on-surface-variant">Subtotal</span>
+          <span class="font-semibold text-body-md text-on-surface" id="result-subtotal">—</span>
+        </div>
+        <div class="flex justify-between items-center py-xs border-b border-outline-variant">
+          <span class="text-body-md text-on-surface-variant">Impuestos</span>
+          <span class="font-semibold text-body-md text-on-surface" id="result-impuesto">—</span>
+        </div>
+        <div class="flex justify-between items-center pt-sm">
+          <span class="font-bold text-body-lg text-primary">Total</span>
+          <span class="font-bold text-[20px] text-primary" id="result-total">—</span>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="flex flex-col gap-sm">
+        <button
+          id="btn-save-invoice"
+          class="w-full bg-primary text-on-primary h-12 rounded-xl
+                 flex items-center justify-center gap-sm font-label-md
+                 active:scale-[0.98] transition-transform shadow-md">
+          <span class="material-symbols-outlined">save</span>
+          Guardar factura
+        </button>
+        <button
+          id="btn-scan-again"
+          class="w-full border border-outline-variant text-on-surface h-12 rounded-xl
+                 flex items-center justify-center gap-sm font-label-md
+                 active:scale-[0.98] transition-transform hover:bg-surface-container-low">
+          <span class="material-symbols-outlined">refresh</span>
+          Escanear otra factura
+        </button>
+      </div>
+
+    </section><!-- /phase-result -->
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/scanner.js"></script>
+</body>
+</html>
