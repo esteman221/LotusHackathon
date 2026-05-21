@@ -1,0 +1,172 @@
+/* =========================================
+   FacturaAI — scanner.css
+   Estilos exclusivos de la página de escaneo.
+   Complementa styles.css sin modificarlo.
+   ========================================= */
+
+/* ── Zona de captura (dropzone) ──────────── */
+.scanner-dropzone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #eff4ff;
+  border: 2px dashed #c5c6cd;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.scanner-dropzone:hover {
+  border-color: #adc6ff;
+  background: #e5eeff;
+}
+
+/* ── Preview de imagen ───────────────────── */
+.scanner-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  animation: fadeSlideUp 0.3s ease both;
+}
+
+/* ── Placeholder (estado vacío) ──────────── */
+.scanner-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: #45474c;
+}
+
+.scanner-placeholder__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #dce9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-placeholder__icon .material-symbols-outlined {
+  font-size: 32px;
+  color: #0058be;
+}
+
+.scanner-placeholder__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0b1c30;
+  line-height: 24px;
+}
+
+.scanner-placeholder__subtitle {
+  font-size: 12px;
+  color: #45474c;
+  line-height: 16px;
+  max-width: 220px;
+}
+
+/* ── Esquinas decorativas del visor ──────── */
+.scanner-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #0058be;
+  border-style: solid;
+  border-width: 0;
+}
+
+.scanner-corner--tl { top: 10px; left: 10px;  border-top-width: 3px; border-left-width: 3px;  border-top-left-radius: 4px; }
+.scanner-corner--tr { top: 10px; right: 10px; border-top-width: 3px; border-right-width: 3px; border-top-right-radius: 4px; }
+.scanner-corner--bl { bottom: 10px; left: 10px;  border-bottom-width: 3px; border-left-width: 3px;  border-bottom-left-radius: 4px; }
+.scanner-corner--br { bottom: 10px; right: 10px; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 4px; }
+
+/* ── Spinner de procesamiento ────────────── */
+.scanner-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-spinner__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid #dce9ff;
+  border-top-color: #0058be;
+  animation: spin 1s linear infinite;
+}
+
+.scanner-spinner__icon {
+  font-size: 32px;
+  color: #0058be;
+  animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-icon {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.6; transform: scale(0.92); }
+}
+
+/* ── Barra de progreso ───────────────────── */
+.scanner-progress-bar {
+  animation: progress-fill 2s ease-in-out infinite;
+  transform-origin: left;
+}
+
+@keyframes progress-fill {
+  0%   { transform: scaleX(0);    }
+  60%  { transform: scaleX(0.85); }
+  80%  { transform: scaleX(0.92); }
+  100% { transform: scaleX(0);    }
+}
+
+/* ── Pasos del proceso ───────────────────── */
+.processing-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #c5c6cd;
+  padding: 6px 10px;
+  border-radius: 0.5rem;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+.processing-step--active {
+  color: #0058be;
+  background: #e5eeff;
+}
+
+.processing-step--done {
+  color: #16a34a;
+}
+
+/* ── Animación de entrada para resultado ─── */
+#phase-result .bg-surface,
+#phase-result .flex {
+  animation: fadeSlideUp 0.35s ease both;
+}
+
+#phase-result > *:nth-child(1) { animation-delay: 0.05s; }
+#phase-result > *:nth-child(2) { animation-delay: 0.10s; }
+#phase-result > *:nth-child(3) { animation-delay: 0.15s; }
+#phase-result > *:nth-child(4) { animation-delay: 0.20s; }
+#phase-result > *:nth-child(5) { animation-delay: 0.25s; }

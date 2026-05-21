@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Servicio 1: La Base de Datos PostgreSQL
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: control_perdidas_db
+    restart: always
+    environment:
+      POSTGRES_USER: usuario_hackathon
+      POSTGRES_PASSWORD: password_seguro123
+      POSTGRES_DB: control_perdidas
+    ports:
+      - "5432:5432"
+    volumes:
+      # Inicialización automática con tus scripts SQL en orden
+      - ./scripts:/docker-entrypoint-initdb.d/
+      # Persistencia de los datos del inventario
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - red-hackathon
+
+  # Servicio 2: Tu API Backend en Python
+  backend_api:
+    build: ./backend
+    container_name: control_perdidas_api
+    restart: always
+    volumes:
+      # Mapea tu carpeta local al contenedor para cambios en tiempo real (hot-reload)
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres_db
+      - DB_PORT=5432
+      - DB_NAME=control_perdidas
+      - DB_USER=usuario_hackathon
+      - DB_PASS=password_seguro123
+      - ANTHROPIC_API_KEY=tu_api_key_aqui
+    depends_on:
+      - postgres_db
+    networks:
+      - red-hackathon
+
+volumes:
+  postgres_data:
+
+networks:
+  red-hackathon:
+    driver: bridge

@@ -1,3 +1,7 @@
+# v0.6
+
+    * Se implemento el OCR para la facturación.
+
 # v0.5 
 
     * Se implemento la primera union entre el frontend y backend.

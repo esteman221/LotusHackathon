@@ -222,7 +222,7 @@ function initInventoryFilters() {
  * TODO (producción): abrir cámara / selector de archivo y llamar a la API de OCR.
  */
 function handleScanInvoice() {
-  alert("Función de escaneo próximamente.\nAquí se abrirá la cámara o el selector de archivo.");
+  window.location.href = "scanner.html";
 }
 
 /**
