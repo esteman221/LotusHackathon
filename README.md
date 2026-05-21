@@ -1,3 +1,7 @@
+# v0.4
+
+    * Se implemento la primera capa del frontend y conexion con la base de datos primitiva.
+
 # v0.3
 
     * Se implemento Posts y Gets en JSON y el semaforo se actualiza automaticamente desde la vista.

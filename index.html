@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FacturaAI — Dashboard de Inventario</title>
+
+  <!-- Tailwind CSS con plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Configuración de Tailwind (paleta y tipografía del sistema de diseño) -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary":                    "#091426",
+            "on-primary":                 "#ffffff",
+            "primary-container":          "#1e293b",
+            "primary-fixed":              "#d8e3fb",
+            "primary-fixed-dim":          "#bcc7de",
+            "on-primary-fixed":           "#111c2d",
+            "on-primary-fixed-variant":   "#3c475a",
+            "on-primary-container":       "#8590a6",
+            "inverse-primary":            "#bcc7de",
+            "secondary":                  "#0058be",
+            "on-secondary":               "#ffffff",
+            "secondary-container":        "#2170e4",
+            "on-secondary-container":     "#fefcff",
+            "secondary-fixed":            "#d8e2ff",
+            "secondary-fixed-dim":        "#adc6ff",
+            "on-secondary-fixed":         "#001a42",
+            "on-secondary-fixed-variant": "#004395",
+            "tertiary":                   "#1e1200",
+            "on-tertiary":                "#ffffff",
+            "tertiary-container":         "#35260c",
+            "on-tertiary-container":      "#a38c6a",
+            "tertiary-fixed":             "#fadfb8",
+            "tertiary-fixed-dim":         "#ddc39d",
+            "on-tertiary-fixed":          "#271902",
+            "on-tertiary-fixed-variant":  "#564427",
+            "surface":                    "#f8f9ff",
+            "surface-dim":                "#cbdbf5",
+            "surface-bright":             "#f8f9ff",
+            "surface-container-lowest":   "#ffffff",
+            "surface-container-low":      "#eff4ff",
+            "surface-container":          "#e5eeff",
+            "surface-container-high":     "#dce9ff",
+            "surface-container-highest":  "#d3e4fe",
+            "on-surface":                 "#0b1c30",
+            "on-surface-variant":         "#45474c",
+            "surface-variant":            "#d3e4fe",
+            "surface-tint":               "#545f73",
+            "inverse-surface":            "#213145",
+            "inverse-on-surface":         "#eaf1ff",
+            "outline":                    "#75777d",
+            "outline-variant":            "#c5c6cd",
+            "background":                 "#f8f9ff",
+            "on-background":              "#0b1c30",
+            "error":                      "#ba1a1a",
+            "on-error":                   "#ffffff",
+            "error-container":            "#ffdad6",
+            "on-error-container":         "#93000a",
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg:      "0.25rem",
+            xl:      "0.5rem",
+            full:    "0.75rem",
+          },
+          spacing: {
+            xs:              "4px",
+            sm:              "8px",
+            md:              "16px",
+            lg:              "24px",
+            xl:              "32px",
+            unit:            "4px",
+            gutter:          "16px",
+            "margin-mobile": "16px",
+            "margin-tablet": "24px",
+          },
+          fontFamily: {
+            "body-md":           ["Inter"],
+            "body-lg":           ["Inter"],
+            "label-sm":          ["Inter"],
+            "label-md":          ["Inter"],
+            "headline-md":       ["Inter"],
+            "headline-lg":       ["Inter"],
+            "headline-lg-mobile":["Inter"],
+          },
+          fontSize: {
+            "body-md":            ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "body-lg":            ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "label-sm":           ["11px", { lineHeight: "14px", fontWeight: "500" }],
+            "label-md":           ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "headline-md":        ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "headline-lg":        ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-32">
+
+  <!-- ══════════════════════════════════════
+       TOP APP BAR
+  ══════════════════════════════════════ -->
+  <header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50
+                 flex justify-between items-center px-margin-mobile h-12">
+    <div class="flex items-center gap-sm">
+      <span class="material-symbols-outlined text-primary">inventory_2</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary">FacturaAI</h1>
+    </div>
+    <div class="flex items-center">
+      <span class="material-symbols-outlined text-on-surface-variant
+                   hover:bg-surface-container-low p-2 rounded-full cursor-pointer
+                   transition-transform active:scale-95">
+        account_circle
+      </span>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ══════════════════════════════════════ -->
+  <main class="mt-12 px-margin-mobile pt-lg">
+
+    <!-- Dashboard Header -->
+    <div class="mb-lg">
+      <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-xs">
+        Dashboard de Inventario
+      </h2>
+      <p class="text-on-surface-variant font-body-md">
+        Estado general de tu negocio en tiempo real.
+      </p>
+    </div>
+
+    <!-- ── CTA: Escanear Factura ──────────── -->
+    <section class="mb-xl">
+      <button
+        id="btn-scan-invoice"
+        class="w-full bg-primary text-on-primary h-12 rounded-xl
+               flex items-center justify-center gap-sm font-label-md
+               active:scale-[0.98] transition-transform shadow-md">
+        <span class="material-symbols-outlined">photo_camera</span>
+        Escanear Factura
+      </button>
+    </section>
+
+    <!-- ── KPI Cards (Bento Grid) ─────────── -->
+    <section id="kpi-grid" class="grid grid-cols-2 gap-sm mb-xl">
+
+      <!-- OK (verde) -->
+      <div data-kpi="ok"
+           class="bg-surface border border-outline-variant p-md rounded-xl
+                  flex flex-col gap-xs border-l-4 border-l-green-500">
+        <div class="flex justify-between items-start">
+          <span class="text-label-md font-label-md text-on-surface-variant">Stock OK</span>
+          <span class="material-symbols-outlined text-green-600">check_circle</span>
+        </div>
+        <p class="kpi-count text-[28px] font-bold text-primary">—</p>
+        <div class="bg-green-100 text-green-700 text-label-sm px-xs py-[2px] rounded-sm w-fit">
+          Bien abastecido
+        </div>
+        <p class="kpi-trend text-[11px] text-on-surface-variant"></p>
+      </div>
+
+      <!-- Pedir pronto (naranja) -->
+      <div data-kpi="warning"
+           class="bg-surface border border-outline-variant p-md rounded-xl
+                  flex flex-col gap-xs border-l-4 border-l-orange-500">
+        <div class="flex justify-between items-start">
+          <span class="text-label-md font-label-md text-on-surface-variant">Pedir pronto</span>
+          <span class="material-symbols-outlined text-orange-600">warning</span>
+        </div>
+        <p class="kpi-count text-[28px] font-bold text-primary">—</p>
+        <div class="bg-orange-100 text-orange-700 text-label-sm px-xs py-[2px] rounded-sm w-fit">
+          Alerta baja
+        </div>
+        <p class="kpi-trend text-[11px] text-on-surface-variant"></p>
+      </div>
+
+      <!-- Urgente (rojo) — ocupa 2 columnas -->
+      <div data-kpi="urgent"
+           class="bg-surface border border-outline-variant p-md rounded-xl
+                  flex flex-col gap-xs border-l-4 border-l-red-500 col-span-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="text-label-md font-label-md text-on-surface-variant block">Urgente</span>
+            <p class="kpi-count text-[32px] font-bold text-primary leading-tight">—</p>
+          </div>
+          <div class="bg-red-100 text-red-700 text-label-sm px-sm py-xs rounded-lg
+                      flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[16px]">error</span>
+            Sin stock
+          </div>
+        </div>
+        <p class="kpi-trend text-[11px] text-on-surface-variant"></p>
+      </div>
+
+      <!-- Sobrestock (morado) -->
+      <div data-kpi="overstock"
+           class="bg-surface border border-outline-variant p-md rounded-xl
+                  flex flex-col gap-xs border-l-4 border-l-purple-500">
+        <div class="flex justify-between items-start">
+          <span class="text-label-md font-label-md text-on-surface-variant">Sobrestock</span>
+          <span class="material-symbols-outlined text-purple-600">layers</span>
+        </div>
+        <p class="kpi-count text-[28px] font-bold text-primary">—</p>
+        <div class="bg-purple-100 text-purple-700 text-label-sm px-xs py-[2px] rounded-sm w-fit">
+          Excedente
+        </div>
+        <p class="kpi-trend text-[11px] text-on-surface-variant"></p>
+      </div>
+
+      <!-- Rotación lenta (gris) -->
+      <div data-kpi="slow"
+           class="bg-surface border border-outline-variant p-md rounded-xl
+                  flex flex-col gap-xs border-l-4 border-l-slate-400">
+        <div class="flex justify-between items-start">
+          <span class="text-label-md font-label-md text-on-surface-variant">Lento</span>
+          <span class="material-symbols-outlined text-slate-500">motion_photos_off</span>
+        </div>
+        <p class="kpi-count text-[28px] font-bold text-primary">—</p>
+        <div class="bg-slate-100 text-slate-700 text-label-sm px-xs py-[2px] rounded-sm w-fit">
+          Baja rotación
+        </div>
+        <p class="kpi-trend text-[11px] text-on-surface-variant"></p>
+      </div>
+
+    </section><!-- /kpi-grid -->
+
+    <!-- ── Actividad Reciente ─────────────── -->
+    <section class="mb-xl">
+      <div class="flex justify-between items-center mb-md">
+        <h3 class="font-headline-md text-headline-md text-primary">Actividad Reciente</h3>
+        <button id="btn-view-all-invoices" class="text-secondary font-label-md">
+          Ver todo
+        </button>
+      </div>
+      <!-- Los items se inyectan desde app.js -->
+      <div id="recent-invoices" class="flex flex-col gap-sm"></div>
+    </section>
+
+    <!-- ── Inventario con Filtros ─────────── -->
+    <section class="mb-xl">
+      <div class="flex justify-between items-center mb-md">
+        <h3 class="font-headline-md text-headline-md text-primary">Inventario</h3>
+      </div>
+
+      <!-- Barra de filtros -->
+      <div id="inventory-filters"
+           class="flex gap-xs overflow-x-auto pb-sm mb-md scrollbar-hide">
+        <button class="filter-btn filter-btn--active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="ok">
+          <span class="status-dot status-dot--ok"></span>OK
+        </button>
+        <button class="filter-btn" data-filter="warning">
+          <span class="status-dot status-dot--warning"></span>Pronto
+        </button>
+        <button class="filter-btn" data-filter="urgent">
+          <span class="status-dot status-dot--urgent"></span>Urgente
+        </button>
+        <button class="filter-btn" data-filter="overstock">
+          <span class="status-dot status-dot--overstock"></span>Excedente
+        </button>
+        <button class="filter-btn" data-filter="slow">
+          <span class="status-dot status-dot--slow"></span>Lento
+        </button>
+      </div>
+
+      <!-- Encabezado de la tabla -->
+      <div class="grid grid-cols-[1fr_auto_auto_auto] gap-3 px-2 mb-xs">
+        <span class="text-label-md text-on-surface-variant">Producto</span>
+        <span class="text-label-md text-on-surface-variant text-right">Stock</span>
+        <span class="text-label-md text-on-surface-variant text-center">Días</span>
+        <span class="text-label-md text-on-surface-variant">Estado</span>
+      </div>
+
+      <!-- Los items se inyectan desde app.js -->
+      <div id="inventory-list" class="flex flex-col gap-sm"></div>
+    </section>
+
+    <!-- ── Banner de reporte ──────────────── -->
+    <section class="mt-lg mb-xl">
+      <div class="relative w-full aspect-video rounded-xl overflow-hidden
+                  bg-primary-container group">
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7mXZ2Bx_l-ug3szd1xeZKi7XflQdIClc_D2UbkgB2AOgBDN8J3ky9YuI0Ll_n4StwxZ0MTQsrglm9t-nbONoLX203SOKVrdSjvCCuXDma5ZT2mx-ZAsvUl8V8bPs0RoXCsC0TWqBaAp4sZfSBrkg04mW_KTR_8XmevBLPTLntARk7WLMCJMUCLSm4ZoTYIjYIKE-dBqifDCbrZnlWleWYMUHxdtH3BhrCmPS2-7VKFBbvY_r4CCET3Ser54UWctWpak1eTS9FhEXK"
+          alt="Bodega organizada"
+          class="w-full h-full object-cover opacity-60
+                 transition-transform duration-700 group-hover:scale-105"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent
+                    flex flex-col justify-end p-md">
+          <h4 class="text-on-primary font-headline-md">¿Necesitas ayuda con el stock?</h4>
+          <p class="text-primary-fixed-dim text-body-md">
+            Generar un reporte automático de compras basado en tus ventas del mes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       BOTTOM NAVIGATION
+  ══════════════════════════════════════ -->
+  <nav class="fixed bottom-0 left-0 w-full h-16 flex justify-around items-center
+              bg-surface border-t border-outline-variant pb-safe z-50 shadow-md">
+
+    <!-- Dashboard (activo) -->
+    <a href="#"
+       class="flex flex-col items-center justify-center
+              bg-secondary-container text-on-secondary-container
+              rounded-full px-4 py-1 active:scale-90 transition-all duration-200">
+      <span class="material-symbols-outlined"
+            style="font-variation-settings: 'FILL' 1;">dashboard</span>
+      <span class="font-label-md text-label-md">Dashboard</span>
+    </a>
+
+    <!-- Escanear -->
+    <a href="#"
+       class="flex flex-col items-center justify-center text-on-surface-variant
+              px-4 py-1 hover:bg-surface-container-high active:scale-90
+              transition-all duration-200">
+      <span class="material-symbols-outlined">qr_code_scanner</span>
+      <span class="font-label-md text-label-md">Escanear</span>
+    </a>
+
+    <!-- Inventario -->
+    <a href="#"
+       class="flex flex-col items-center justify-center text-on-surface-variant
+              px-4 py-1 hover:bg-surface-container-high active:scale-90
+              transition-all duration-200">
+      <span class="material-symbols-outlined">list_alt</span>
+      <span class="font-label-md text-label-md">Inventario</span>
+    </a>
+
+    <!-- Ajustes -->
+    <a href="#"
+       class="flex flex-col items-center justify-center text-on-surface-variant
+              px-4 py-1 hover:bg-surface-container-high active:scale-90
+              transition-all duration-200">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-label-md text-label-md">Ajustes</span>
+    </a>
+
+  </nav>
+
+  <!-- Lógica de la aplicación -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
