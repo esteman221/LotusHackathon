@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import health, inventory, recommendations
+from app.api.routes import health, inventory, invoices, recommendations
 from app.core.config import settings
 from app.db.connection import close_db_pool, init_db_pool
 
@@ -36,7 +36,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(inventory.router)
 app.include_router(recommendations.router)
-
+app.include_router(invoices.router)
 
 @app.get("/")
 def root():
