@@ -1,3 +1,7 @@
+# v0.5 
+
+    * Se implemento la primera union entre el frontend y backend.
+
 # v0.4
 
     * Se implemento la primera capa del frontend y conexion con la base de datos primitiva.
