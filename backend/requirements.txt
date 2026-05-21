@@ -3,4 +3,5 @@ uvicorn[standard]
 psycopg[binary,pool]
 python-dotenv
 pydantic-settings
-anthropic
+python-multipart
+google-genai

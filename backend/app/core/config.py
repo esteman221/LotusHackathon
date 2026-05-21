@@ -7,8 +7,8 @@ class Settings(BaseSettings):
 
     database_url: str
 
-    anthropic_api_key: str = "TU_API_KEY_AQUI"
-    anthropic_model: str = "claude-sonnet-4-20250514"
+    gemini_api_key: str = "AIzaSyDoKVd96nb9T_WjLHLFvvo-x1EfWBSK5YI"
+    gemini_model: str = "gemini-2.0-flash"
 
     model_config = SettingsConfigDict(
         env_file=".env",
